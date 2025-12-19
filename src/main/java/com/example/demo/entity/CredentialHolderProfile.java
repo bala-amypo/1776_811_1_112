@@ -1,70 +1,100 @@
+
+package com.example.DitigitalCrendentialVerificationSystem.entity;
+
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
-public class User {
- @Column(unique=true)
- private long id;
- private String holderid;
- private String fullname;
-@Column(unique=true)
- private String email;
- private String oranganization;
- private boolean active;
- private LocalDateTime createdAt;
+@Entity
+@Table(
+    name = "credential_holder_profile",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "holderId"),
+        @UniqueConstraint(columnNames = "email")
+    }
+)
+public class CredentialHolderProfile {
 
- public User(long id, String holderid, String fullname, String email, String oranganization, boolean active,
-        LocalDateTime createdAt) {
-    this.id = id;
-    this.holderid = holderid;
-    this.fullname = fullname;
-    this.email = email;
-    this.oranganization = oranganization;
-    this.active = active;
-    this.createdAt = createdAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String holderId;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false)
+    private String email;
+
+    private String organization;
+
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getHolderId() {
+        return holderId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getOrganization() {
+        return organization;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setHolderId(String holderId) {
+        this.holderId = holderId;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
- public  void setId(long id){
-    id=this.id;
- }
- public long getid(long id){
-     return id;
-     
- }
- public long getId() {
-    return id;
- }
- public String getHolderid() {
-    return holderid;
- }
- public void setHolderid(String holderid) {
-    this.holderid = holderid;
- }
- public String getFullname() {
-    return fullname;
- }
- public void setFullname(String fullname) {
-    this.fullname = fullname;
- }
- public String getEmail() {
-    return email;
- }
- public void setEmail(String email) {
-    this.email = email;
- }
- public String getOranganization() {
-    return oranganization;
- }
- public void setOranganization(String oranganization) {
-    this.oranganization = oranganization;
- }
- public boolean isActive() {
-    return active;
- }
- public void setActive(boolean active) {
-    this.active = active;
- }
- public LocalDateTime getCreatedAt() {
-    return createdAt;
- }
- public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
- }
-}
+
