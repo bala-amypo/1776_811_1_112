@@ -1,4 +1,4 @@
-package com.example.DitigitalCrendentialVerificationSystem.entity;
+package com.example.demo.entity;
 
 
 import java.time.LocalDate;

@@ -1,5 +1,5 @@
 
-package com.example.DitigitalCrendentialVerificationSystem.entity;
+package com.example.demo.entity;
 
 
 import jakarta.persistence.Column;
