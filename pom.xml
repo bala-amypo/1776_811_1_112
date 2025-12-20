@@ -87,7 +87,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Spring Boot Test (JUnit support etc.) -->
+        <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -102,11 +102,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- TestNG -->
+        <!-- TestNG (STABLE & AVAILABLE) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.8.1</version>
+            <version>7.8.0</version>
             <scope>test</scope>
         </dependency>
 
