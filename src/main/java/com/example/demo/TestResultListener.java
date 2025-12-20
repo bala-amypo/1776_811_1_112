@@ -22,8 +22,12 @@ public class TestResultListener implements ITestListener {
     }
 
     @Override
-    public void onStart(ITestContext context) {}
+    public void onStart(ITestContext context) {
+        System.out.println("Test Suite started: " + context.getName());
+    }
 
     @Override
-    public void onFinish(ITestContext context) {}
+    public void onFinish(ITestContext context) {
+        System.out.println("Test Suite finished: " + context.getName());
+    }
 }

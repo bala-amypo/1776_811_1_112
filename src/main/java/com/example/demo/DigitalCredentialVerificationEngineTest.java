@@ -22,7 +22,18 @@ public class DigitalCredentialVerificationEngineTest {
     @Mock
     private UserRepository userRepository;
 
-    private PasswordEncoder testPasswordEncoder = s -> s + "_ENC"; // simple encoder for tests
+    // ✅ Fixed PasswordEncoder using anonymous inner class
+    private PasswordEncoder testPasswordEncoder = new PasswordEncoder() {
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return rawPassword + "_ENC"; // same behavior as before
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            return (rawPassword + "_ENC").equals(encodedPassword); // simple matching
+        }
+    };
 
     @InjectMocks
     private UserServiceImpl userService;

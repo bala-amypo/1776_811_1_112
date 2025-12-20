@@ -108,6 +108,13 @@
     <version>7.8.1</version>
     <scope>test</scope>
 </dependency>
+<!-- TestNG for unit testing -->
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.8.0</version>
+    <scope>test</scope>
+</dependency>
 
 
     </dependencies>
