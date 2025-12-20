@@ -43,11 +43,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- MySQL Connector (FIXED ✅) -->
+        <!-- MySQL Connector (FIXED & AVAILABLE ✅) -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.4.0</version>
+            <version>8.0.33</version>
             <scope>runtime</scope>
         </dependency>
 
