@@ -1,4 +1,4 @@
-package com.example.demo;
+package java.com.example.demo;
 
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;
@@ -26,11 +26,10 @@ public class DigitalCredentialVerificationEngineTest {
     @Mock
     private UserRepository userRepository;
 
-    // ✅ Fixed PasswordEncoder using anonymous inner class
     private PasswordEncoder testPasswordEncoder = new PasswordEncoder() {
         @Override
         public String encode(CharSequence rawPassword) {
-            return rawPassword + "_ENC"; // same behavior as before
+            return rawPassword + "_ENC"; 
         }
 
         @Override
