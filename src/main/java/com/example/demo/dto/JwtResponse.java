@@ -6,11 +6,19 @@ public class JwtResponse {
     private Long id;
     private String email;
     private String role;
+    public JwtResponse() {} // no-args constructor
 
+    // Add this constructor
+    public JwtResponse(String token, Long id, String username, String email) {
+        this.token = token;
+        this.id = id;
+        this.username = username;
+        this.email = email;
+    }
     public String getToken() {
         return token;
     }
-
+    
     public void setToken(String token) {
         this.token = token;
     }
