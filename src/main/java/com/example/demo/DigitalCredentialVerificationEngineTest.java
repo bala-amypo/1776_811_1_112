@@ -1,4 +1,4 @@
-package java.com.example.demo;
+package com.example.demo;
 
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.*;

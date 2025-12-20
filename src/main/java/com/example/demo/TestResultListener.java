@@ -1,4 +1,4 @@
-package java.com.example.demo;
+package com.example.demo;
 
 import org.testng.ITestContext;
 import org.testng.ITestListener;
