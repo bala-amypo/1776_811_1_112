@@ -5,8 +5,11 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -14,8 +17,11 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
 
+        Server httpsServer = new Server();
+        httpsServer.setUrl("https://9361.408procr.amypo.ai");
+        httpsServer.setDescription("HTTPS Server");
+
         SecurityScheme securityScheme = new SecurityScheme()
-                .name("Authorization")
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
@@ -24,7 +30,10 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Digital Credential Verification Engine")
                         .version("1.0"))
-                .addSecurityItem(new SecurityRequirement().addList("Authorization"))
+                .servers(List.of(httpsServer))
+                .addSecurityItem(
+                        new SecurityRequirement().addList("Authorization")
+                )
                 .components(
                         new io.swagger.v3.oas.models.Components()
                                 .addSecuritySchemes("Authorization", securityScheme)
