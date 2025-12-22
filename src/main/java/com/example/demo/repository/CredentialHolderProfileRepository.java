@@ -10,5 +10,7 @@ public interface CredentialHolderProfileRepository
 
     Optional<CredentialHolderProfile> findById(Long id);
 
-    CredentialHolderProfile save(CredentialHolderProfile profile);
+    CredentialHolderProfile save(CredentialHolderPr
+    
+    ofile profile);
 }
