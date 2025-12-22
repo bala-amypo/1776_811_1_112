@@ -1,14 +1,3 @@
-package com.example.demo.service.impl;
-
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.VerificationRule;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.VerificationRuleRepository;
-import com.example.demo.service.VerificationRuleService;
-
 @Service
 public class VerificationRuleServiceImpl implements VerificationRuleService {
 
@@ -29,6 +18,9 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
         existing.setRuleCode(updatedRule.getRuleCode());
+        existing.setDescription(updatedRule.getDescription());
+        existing.setAppliesToType(updatedRule.getAppliesToType());
+        existing.setValidationExpression(updatedRule.getValidationExpression());
         existing.setActive(updatedRule.getActive());
 
         return repository.save(existing);

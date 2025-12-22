@@ -1,15 +1,3 @@
-package com.example.demo.service.impl;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.CredentialRecord;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.CredentialRecordRepository;
-import com.example.demo.service.CredentialRecordService;
-
 @Service
 public class CredentialRecordServiceImpl implements CredentialRecordService {
 
@@ -21,8 +9,9 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
 
     @Override
     public CredentialRecord createCredential(CredentialRecord record) {
+
         if (record.getStatus() == null) {
-            record.setStatus("VALID");
+            record.setStatus("ACTIVE");
         }
 
         if (record.getExpiryDate() != null &&
@@ -38,10 +27,12 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
         CredentialRecord existing = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Credential not found"));
 
-        existing.setCredentialCode(update.getCredentialCode());
+        // ❌ DO NOT update credentialCode (unique & immutable)
         existing.setTitle(update.getTitle());
         existing.setIssuer(update.getIssuer());
         existing.setStatus(update.getStatus());
+        existing.setExpiryDate(update.getExpiryDate());
+        existing.setMetadataJson(update.getMetadataJson());
 
         return repository.save(existing);
     }
@@ -53,7 +44,8 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
 
     @Override
     public CredentialRecord getCredentialByCode(String code) {
-        return repository.findByCredentialCode(code).orElse(null);
+        return repository.findByCredentialCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException("Credential not found"));
     }
 
     @Override

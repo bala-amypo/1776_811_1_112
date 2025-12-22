@@ -11,10 +11,6 @@ import java.util.Optional;
 public interface CredentialRecordRepository
         extends JpaRepository<CredentialRecord, Long> {
 
-    CredentialRecord save(CredentialRecord record);
-
-    Optional<CredentialRecord> findById(Long id);
-
     List<CredentialRecord> findByHolderId(Long holderId);
 
     Optional<CredentialRecord> findByCredentialCode(String credentialCode);

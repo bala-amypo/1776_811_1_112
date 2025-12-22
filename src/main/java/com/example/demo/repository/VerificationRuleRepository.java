@@ -8,7 +8,5 @@ import java.util.List;
 public interface VerificationRuleRepository
         extends JpaRepository<VerificationRule, Long> {
 
-    VerificationRule save(VerificationRule rule);
-
     List<VerificationRule> findByActiveTrue();
 }
