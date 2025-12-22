@@ -26,17 +26,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // Disable CSRF (JWT is stateless)
             .csrf(csrf -> csrf.disable())
 
-            // Stateless session
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // Authorization rules
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
+                
                 .requestMatchers(
                         "/auth/register",
                         "/auth/login",
