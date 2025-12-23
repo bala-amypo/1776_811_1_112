@@ -43,11 +43,9 @@ public class SecurityConfig {
                         "/status"
                 ).permitAll()
 
-                // All other endpoints need authentication
                 .anyRequest().authenticated()
             );
 
-        // Register JWT filter
         http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -56,7 +54,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // AuthenticationManager bean
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {
