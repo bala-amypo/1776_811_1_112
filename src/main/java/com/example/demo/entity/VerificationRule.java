@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class VerificationRule {
@@ -11,33 +10,60 @@ public class VerificationRule {
     private Long id;
 
     private String ruleCode;
-    private boolean active = true;
+    private String description;
+    private String appliesToType;
+    private String validationExpression;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private Boolean active;   // 🔴 tests expect this field
 
-    public String getRuleCode() { return ruleCode; }
-    public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
+    // ===== GETTERS & SETTERS =====
 
-    // ✅ Correct boolean getter
-    public boolean isActive() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAppliesToType() {
+        return appliesToType;
+    }
+
+    public void setAppliesToType(String appliesToType) {
+        this.appliesToType = appliesToType;
+    }
+
+    public String getValidationExpression() {
+        return validationExpression;
+    }
+
+    public void setValidationExpression(String validationExpression) {
+        this.validationExpression = validationExpression;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VerificationRule)) return false;
-        VerificationRule that = (VerificationRule) o;
-        return Objects.equals(ruleCode, that.ruleCode);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ruleCode);
     }
 }

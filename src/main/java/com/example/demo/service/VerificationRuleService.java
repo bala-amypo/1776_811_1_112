@@ -11,6 +11,6 @@ public interface VerificationRuleService {
 
     List<VerificationRule> getAllRules();
 
-    // 🔴 THIS METHOD EXISTS → MUST BE IMPLEMENTED
+    // 🔴 REQUIRED BY TESTS
     List<VerificationRule> getActiveRules();
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.VerificationRule;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.VerificationRuleRepository;
 import com.example.demo.service.VerificationRuleService;
 
@@ -24,14 +23,14 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
     }
 
     @Override
-    public VerificationRule updateRule(Long id, VerificationRule updatedRule) {
-        VerificationRule rule = ruleRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
-
-        rule.setRuleCode(updatedRule.getRuleCode());
-        rule.setActive(updatedRule.isActive()); // ✅ boolean getter
-
-        return ruleRepository.save(rule);
+    public VerificationRule updateRule(Long id, VerificationRule rule) {
+        VerificationRule existing = ruleRepository.findById(id).orElseThrow();
+        existing.setRuleCode(rule.getRuleCode());
+        existing.setDescription(rule.getDescription());
+        existing.setAppliesToType(rule.getAppliesToType());
+        existing.setValidationExpression(rule.getValidationExpression());
+        existing.setActive(rule.getActive());
+        return ruleRepository.save(existing);
     }
 
     @Override
@@ -39,9 +38,9 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
         return ruleRepository.findAll();
     }
 
-    // ✅ 🔥 THIS FIXES YOUR CURRENT ERROR
+    // ✅ THIS FIXES THE ERROR
     @Override
     public List<VerificationRule> getActiveRules() {
-        return ruleRepository.findByActiveTrue();
+        return ruleRepository.findByActive(true);
     }
 }
