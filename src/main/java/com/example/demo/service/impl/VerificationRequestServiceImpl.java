@@ -21,9 +21,9 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
     private final VerificationRequestRepository requestRepo;
     private final CredentialRecordRepository credentialRepo;
     private final AuditTrailService auditTrailService;
-    private final VerificationRuleService verificationRuleService; // 🔴 REQUIRED
+    private final VerificationRuleService verificationRuleService;
 
-    // 🔴 DO NOT CHANGE ORDER
+    // 🔴 ORDER MUST MATCH TEST EXACTLY
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
             CredentialRecordRepository credentialRepo,
@@ -53,7 +53,7 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
 
         if (credential.getExpiryDate() != null &&
                 credential.getExpiryDate().isBefore(LocalDate.now())) {
-            request.setStatus("EXPIRED");
+            request.setStatus("EXPIRED");   // 🔴 TEST EXPECTS THIS STRING
         } else {
             request.setStatus("SUCCESS");
         }
