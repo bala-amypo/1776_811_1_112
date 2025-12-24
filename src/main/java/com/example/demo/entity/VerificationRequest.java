@@ -15,16 +15,17 @@ public class VerificationRequest {
     private Long credentialId;
 
     private String requestedBy;
-
     private String verificationMethod;
-
     private String status;
-
     private LocalDateTime verifiedAt;
-
     private String resultMessage;
 
     public VerificationRequest() {}
+
+    // 🔴 REQUIRED BY TEST
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;

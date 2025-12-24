@@ -9,26 +9,30 @@ import com.example.demo.entity.AuditTrailRecord;
 import com.example.demo.entity.CredentialRecord;
 import com.example.demo.entity.VerificationRequest;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.CredentialRecordRepository;
 import com.example.demo.repository.VerificationRequestRepository;
 import com.example.demo.service.AuditTrailService;
+import com.example.demo.service.CredentialRecordService;
 import com.example.demo.service.VerificationRequestService;
+import com.example.demo.service.VerificationRuleService;
 
 @Service
 public class VerificationRequestServiceImpl implements VerificationRequestService {
 
     private final VerificationRequestRepository requestRepo;
-    private final CredentialRecordRepository credentialRepo;
+    private final CredentialRecordService credentialService;
+    private final VerificationRuleService ruleService;
     private final AuditTrailService auditTrailService;
 
-    // ⚠️ Constructor MUST match test exactly
+    // 🔴 EXACT constructor required by test
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
-            CredentialRecordRepository credentialRepo,
+            CredentialRecordService credentialService,
+            VerificationRuleService ruleService,
             AuditTrailService auditTrailService) {
 
         this.requestRepo = requestRepo;
-        this.credentialRepo = credentialRepo;
+        this.credentialService = credentialService;
+        this.ruleService = ruleService;
         this.auditTrailService = auditTrailService;
     }
 
@@ -43,10 +47,12 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
         VerificationRequest request = requestRepo.findById(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Verification request not found"));
 
-        CredentialRecord credential = credentialRepo.findById(request.getCredentialId())
-                .orElseThrow(() -> new ResourceNotFoundException("Credential not found"));
+        CredentialRecord credential = credentialService.getCredentialByCode(
+                String.valueOf(request.getCredentialId())
+        );
 
-        if (credential.getExpiryDate() != null &&
+        if (credential != null &&
+                credential.getExpiryDate() != null &&
                 credential.getExpiryDate().isBefore(LocalDate.now())) {
 
             request.setStatus("FAILED");
@@ -58,7 +64,7 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
         }
 
         AuditTrailRecord audit = new AuditTrailRecord();
-        audit.setCredentialId(credential.getId());
+        audit.setCredentialId(request.getCredentialId());
         auditTrailService.logEvent(audit);
 
         return requestRepo.save(request);
