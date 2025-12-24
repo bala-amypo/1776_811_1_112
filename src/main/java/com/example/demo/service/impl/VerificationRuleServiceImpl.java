@@ -29,7 +29,7 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
         rule.setRuleCode(updatedRule.getRuleCode());
-        rule.setActive(updatedRule.isActive()); // ✅ FIXED
+        rule.setActive(updatedRule.isActive()); // ✅ boolean getter
 
         return ruleRepository.save(rule);
     }
@@ -37,5 +37,11 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
     @Override
     public List<VerificationRule> getAllRules() {
         return ruleRepository.findAll();
+    }
+
+    // ✅ 🔥 THIS FIXES YOUR CURRENT ERROR
+    @Override
+    public List<VerificationRule> getActiveRules() {
+        return ruleRepository.findByActiveTrue();
     }
 }
