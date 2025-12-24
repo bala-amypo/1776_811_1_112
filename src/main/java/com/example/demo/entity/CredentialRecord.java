@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "credential_record")
 public class CredentialRecord {
 
     @Id
@@ -33,10 +32,14 @@ public class CredentialRecord {
     )
     private Set<VerificationRule> rules = new HashSet<>();
 
-    // ---------------- GETTERS & SETTERS ----------------
+    // ---------- GETTERS & SETTERS ----------
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {   // REQUIRED BY TESTS
+        this.id = id;
     }
 
     public Long getHolderId() {
@@ -119,7 +122,7 @@ public class CredentialRecord {
         this.rules = (rules == null) ? new HashSet<>() : rules;
     }
 
-    // ---------- TEST-EXPECTED HELPERS ----------
+    // ---------- HELPER METHODS ----------
 
     public void addRule(VerificationRule rule) {
         if (rule != null) {
