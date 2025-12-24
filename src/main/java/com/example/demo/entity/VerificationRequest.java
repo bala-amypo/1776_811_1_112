@@ -1,9 +1,4 @@
-package com.example.demo.entity;
-
-import jakarta.persistence.*;
-
 @Entity
-@Table(name = "verification_request")
 public class VerificationRequest {
 
     @Id
@@ -17,8 +12,7 @@ public class VerificationRequest {
         return id;
     }
 
-    // 🔴 REQUIRED BY TESTS
-    public void setId(Long id) {
+    public void setId(Long id) {   // ✅ REQUIRED
         this.id = id;
     }
 

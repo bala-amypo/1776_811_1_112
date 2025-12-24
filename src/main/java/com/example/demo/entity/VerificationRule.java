@@ -3,23 +3,23 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "verification_rule")
 public class VerificationRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String ruleCode;
-    private String description;
-    private String appliesToType;
-    private String validationExpression;
-    private Boolean active = true;
 
-    // -------- GETTERS & SETTERS --------
+    private Boolean active = true;
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {   // ✅ REQUIRED
+        this.id = id;
     }
 
     public String getRuleCode() {
@@ -38,14 +38,13 @@ public class VerificationRule {
         this.active = active;
     }
 
-    // -------- REQUIRED FOR TESTS --------
-
+    // ✅ IMPORTANT FOR SET BEHAVIOR
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof VerificationRule)) return false;
-        VerificationRule rule = (VerificationRule) o;
-        return ruleCode != null && ruleCode.equals(rule.ruleCode);
+        VerificationRule that = (VerificationRule) o;
+        return ruleCode != null && ruleCode.equals(that.ruleCode);
     }
 
     @Override
