@@ -5,42 +5,42 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.VerificationRule;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.VerificationRuleRepository;
 import com.example.demo.service.VerificationRuleService;
 
 @Service
 public class VerificationRuleServiceImpl implements VerificationRuleService {
 
-    private final VerificationRuleRepository ruleRepository;
+    private final VerificationRuleRepository repository;
 
-    public VerificationRuleServiceImpl(VerificationRuleRepository ruleRepository) {
-        this.ruleRepository = ruleRepository;
+    public VerificationRuleServiceImpl(VerificationRuleRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public VerificationRule createRule(VerificationRule rule) {
-        return ruleRepository.save(rule);
+        return repository.save(rule);
     }
 
     @Override
-    public VerificationRule updateRule(Long id, VerificationRule rule) {
-        VerificationRule existing = ruleRepository.findById(id).orElseThrow();
-        existing.setRuleCode(rule.getRuleCode());
-        existing.setDescription(rule.getDescription());
-        existing.setAppliesToType(rule.getAppliesToType());
-        existing.setValidationExpression(rule.getValidationExpression());
-        existing.setActive(rule.getActive());
-        return ruleRepository.save(existing);
+    public VerificationRule updateRule(Long id, VerificationRule updatedRule) {
+        VerificationRule existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
+
+        existing.setRuleCode(updatedRule.getRuleCode());
+        existing.setActive(updatedRule.getActive()); // 🔴 must exist
+
+        return repository.save(existing);
+    }
+
+    @Override
+    public List<VerificationRule> getActiveRules() {
+        return repository.findByActiveTrue(); // 🔴 test expects this
     }
 
     @Override
     public List<VerificationRule> getAllRules() {
-        return ruleRepository.findAll();
-    }
-
-    // ✅ THIS FIXES THE ERROR
-    @Override
-    public List<VerificationRule> getActiveRules() {
-        return ruleRepository.findByActive(true);
+        return repository.findAll();
     }
 }

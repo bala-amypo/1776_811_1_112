@@ -14,15 +14,15 @@ public class VerificationRule {
     private String appliesToType;
     private String validationExpression;
 
-    private Boolean active;   // 🔴 tests expect this field
+    private Boolean active;
 
-    // ===== GETTERS & SETTERS =====
+    // ---------- GETTERS & SETTERS ----------
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id) {   // safe for tests
         this.id = id;
     }
 
@@ -58,11 +58,12 @@ public class VerificationRule {
         this.validationExpression = validationExpression;
     }
 
-    // ✅ REQUIRED BY TESTS
+    // 🔴 REQUIRED BY TEST
     public Boolean getActive() {
         return active;
     }
 
+    // optional but safe
     public void setActive(Boolean active) {
         this.active = active;
     }

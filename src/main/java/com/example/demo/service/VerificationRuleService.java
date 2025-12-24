@@ -9,8 +9,8 @@ public interface VerificationRuleService {
 
     VerificationRule updateRule(Long id, VerificationRule rule);
 
-    List<VerificationRule> getAllRules();
-
-    // 🔴 REQUIRED BY TESTS
+    // 🔴 REQUIRED
     List<VerificationRule> getActiveRules();
+
+    List<VerificationRule> getAllRules();
 }
