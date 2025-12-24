@@ -7,9 +7,8 @@ public interface VerificationRuleService {
 
     VerificationRule createRule(VerificationRule rule);
 
-    VerificationRule updateRule(Long id, VerificationRule rule);
+    VerificationRule updateRule(Long id, VerificationRule updatedRule);
 
-    // 🔴 REQUIRED
     List<VerificationRule> getActiveRules();
 
     List<VerificationRule> getAllRules();
