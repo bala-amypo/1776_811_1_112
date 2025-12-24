@@ -1,23 +1,12 @@
 
 package com.example.demo.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "users")
 public class User {
 
     @Id
@@ -26,18 +15,32 @@ public class User {
 
     private String fullName;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String role = "VIEWER";
+    private String role;
 
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // REQUIRED by JPA
+    public User() {}
+
+    // ✅ REQUIRED by TESTS
+    public User(Long id, String fullName, String email, String password, String role) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    @PrePersist
+    void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    
     public String getFullName() {
         return fullName;
     }
@@ -78,10 +81,6 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;
@@ -90,4 +89,5 @@ public class User {
     public void setId(Long id) {
         this.id = id;
     }
+    
 }
