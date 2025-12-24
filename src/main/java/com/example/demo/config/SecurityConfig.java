@@ -26,20 +26,26 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // Disable CSRF
             .csrf(csrf -> csrf.disable())
 
-            // Stateless session
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // ✅ IMPORTANT: Permit all requests (for tests)
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
+                
+                .requestMatchers(
+                        "/auth/register",
+                        "/auth/login",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/status"
+                ).permitAll()
+
+                .anyRequest().authenticated()
             );
 
-        // Keep JWT filter (won't affect tests)
         http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -54,6 +60,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    // PasswordEncoder bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
