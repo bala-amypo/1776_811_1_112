@@ -13,6 +13,7 @@ import com.example.demo.repository.CredentialRecordRepository;
 import com.example.demo.repository.VerificationRequestRepository;
 import com.example.demo.service.AuditTrailService;
 import com.example.demo.service.VerificationRequestService;
+import com.example.demo.service.VerificationRuleService;
 
 @Service
 public class VerificationRequestServiceImpl implements VerificationRequestService {
@@ -20,23 +21,30 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
     private final VerificationRequestRepository requestRepo;
     private final CredentialRecordRepository credentialRepo;
     private final AuditTrailService auditTrailService;
+    private final VerificationRuleService verificationRuleService; // 🔴 REQUIRED
 
+    // 🔴 DO NOT CHANGE ORDER
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
             CredentialRecordRepository credentialRepo,
-            AuditTrailService auditTrailService) {
+            AuditTrailService auditTrailService,
+            VerificationRuleService verificationRuleService) {
+
         this.requestRepo = requestRepo;
         this.credentialRepo = credentialRepo;
         this.auditTrailService = auditTrailService;
+        this.verificationRuleService = verificationRuleService;
     }
 
     @Override
     public VerificationRequest initiateVerification(VerificationRequest request) {
+        request.setStatus("PENDING");
         return requestRepo.save(request);
     }
 
     @Override
     public VerificationRequest processVerification(Long requestId) {
+
         VerificationRequest request = requestRepo.findById(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
 
@@ -44,8 +52,8 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
                 .orElseThrow(() -> new ResourceNotFoundException("Credential not found"));
 
         if (credential.getExpiryDate() != null &&
-            credential.getExpiryDate().isBefore(LocalDate.now())) {
-            request.setStatus("EXPIRED");   // 🔴 TEST EXPECTS THIS
+                credential.getExpiryDate().isBefore(LocalDate.now())) {
+            request.setStatus("EXPIRED");
         } else {
             request.setStatus("SUCCESS");
         }

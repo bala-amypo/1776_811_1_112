@@ -16,13 +16,11 @@ public class VerificationRule {
 
     private Boolean active;
 
-    // ---------- GETTERS & SETTERS ----------
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {   // safe for tests
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,7 +61,6 @@ public class VerificationRule {
         return active;
     }
 
-    // optional but safe
     public void setActive(Boolean active) {
         this.active = active;
     }
