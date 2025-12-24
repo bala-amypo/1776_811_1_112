@@ -2,36 +2,41 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.servers.Server;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+
+import java.util.List;
 
 @Configuration
-public class SecurityConfig {
+public class SwaggerConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public OpenAPI customOpenAPI() {
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()   // ✅ REQUIRED FOR TESTS
-            );
+        Server httpsServer = new Server();
+        httpsServer.setUrl("https://9359.pro604cr.amypo.ai/");
+        httpsServer.setDescription("HTTPS Server");
 
-        return http.build();
-    }
+        SecurityScheme securityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT");
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Digital Credential Verification Engine")
+                        .version("1.0"))
+                .servers(List.of(httpsServer))
+                .addSecurityItem(
+                        new SecurityRequirement().addList("Authorization")
+                )
+                .components(
+                        new io.swagger.v3.oas.models.Components()
+                                .addSecuritySchemes("Authorization", securityScheme)
+                );
     }
 }
