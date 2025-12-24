@@ -7,9 +7,10 @@ public interface VerificationRuleService {
 
     VerificationRule createRule(VerificationRule rule);
 
-    VerificationRule updateRule(Long id, VerificationRule updatedRule);
-
-    List<VerificationRule> getActiveRules();
+    VerificationRule updateRule(Long id, VerificationRule rule);
 
     List<VerificationRule> getAllRules();
+
+    // 🔴 THIS METHOD EXISTS → MUST BE IMPLEMENTED
+    List<VerificationRule> getActiveRules();
 }

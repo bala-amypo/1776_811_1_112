@@ -12,35 +12,30 @@ import com.example.demo.service.VerificationRuleService;
 @Service
 public class VerificationRuleServiceImpl implements VerificationRuleService {
 
-    private final VerificationRuleRepository repository;
+    private final VerificationRuleRepository ruleRepository;
 
-    public VerificationRuleServiceImpl(VerificationRuleRepository repository) {
-        this.repository = repository;
+    public VerificationRuleServiceImpl(VerificationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
     }
 
     @Override
     public VerificationRule createRule(VerificationRule rule) {
-        return repository.save(rule);
+        return ruleRepository.save(rule);
     }
 
     @Override
     public VerificationRule updateRule(Long id, VerificationRule updatedRule) {
-        VerificationRule existing = repository.findById(id)
+        VerificationRule rule = ruleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
-        existing.setRuleCode(updatedRule.getRuleCode());
-        existing.setActive(updatedRule.getActive());
+        rule.setRuleCode(updatedRule.getRuleCode());
+        rule.setActive(updatedRule.isActive()); // ✅ FIXED
 
-        return repository.save(existing);
-    }
-
-    @Override
-    public List<VerificationRule> getActiveRules() {
-        return repository.findByActiveTrue();
+        return ruleRepository.save(rule);
     }
 
     @Override
     public List<VerificationRule> getAllRules() {
-        return repository.findAll();
+        return ruleRepository.findAll();
     }
 }
