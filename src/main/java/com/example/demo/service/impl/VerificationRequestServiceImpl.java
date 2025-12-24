@@ -21,10 +21,12 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
     private final CredentialRecordRepository credentialRepo;
     private final AuditTrailService auditTrailService;
 
+    // ⚠️ Constructor MUST match test exactly
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
             CredentialRecordRepository credentialRepo,
             AuditTrailService auditTrailService) {
+
         this.requestRepo = requestRepo;
         this.credentialRepo = credentialRepo;
         this.auditTrailService = auditTrailService;
@@ -37,6 +39,7 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
 
     @Override
     public VerificationRequest processVerification(Long requestId) {
+
         VerificationRequest request = requestRepo.findById(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Verification request not found"));
 
@@ -44,10 +47,14 @@ public class VerificationRequestServiceImpl implements VerificationRequestServic
                 .orElseThrow(() -> new ResourceNotFoundException("Credential not found"));
 
         if (credential.getExpiryDate() != null &&
-            credential.getExpiryDate().isBefore(LocalDate.now())) {
+                credential.getExpiryDate().isBefore(LocalDate.now())) {
+
             request.setStatus("FAILED");
+            request.setResultMessage("Credential expired");
+
         } else {
             request.setStatus("SUCCESS");
+            request.setResultMessage("Credential valid");
         }
 
         AuditTrailRecord audit = new AuditTrailRecord();

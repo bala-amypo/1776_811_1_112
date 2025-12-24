@@ -1,83 +1,77 @@
-package com.example.demo.service.impl;
+package com.example.demo.entity;
 
-import java.time.LocalDate;
-import java.util.List;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
-import org.springframework.stereotype.Service;
+@Entity
+@Table(name = "verification_request")
+public class VerificationRequest {
 
-import com.example.demo.entity.AuditTrailRecord;
-import com.example.demo.entity.CredentialRecord;
-import com.example.demo.entity.VerificationRequest;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.VerificationRequestRepository;
-import com.example.demo.service.AuditTrailService;
-import com.example.demo.service.CredentialRecordService;
-import com.example.demo.service.VerificationRequestService;
-import com.example.demo.service.VerificationRuleService;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-@Service
-public class VerificationRequestServiceImpl implements VerificationRequestService {
+    @Column(nullable = false)
+    private Long credentialId;
 
-    private final VerificationRequestRepository requestRepo;
-    private final CredentialRecordService credentialService;
-    private final VerificationRuleService verificationRuleService;
-    private final AuditTrailService auditTrailService;
+    private String requestedBy;
 
-    // ✅ EXACT constructor required by TEST
-    public VerificationRequestServiceImpl(
-            VerificationRequestRepository requestRepo,
-            CredentialRecordService credentialService,
-            VerificationRuleService verificationRuleService,
-            AuditTrailService auditTrailService) {
+    private String verificationMethod;
 
-        this.requestRepo = requestRepo;
-        this.credentialService = credentialService;
-        this.verificationRuleService = verificationRuleService;
-        this.auditTrailService = auditTrailService;
+    private String status;
+
+    private LocalDateTime verifiedAt;
+
+    private String resultMessage;
+
+    public VerificationRequest() {}
+
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public VerificationRequest initiateVerification(VerificationRequest request) {
-        return requestRepo.save(request);
+    public Long getCredentialId() {
+        return credentialId;
     }
 
-    @Override
-    public VerificationRequest processVerification(Long requestId) {
-
-        VerificationRequest request = requestRepo.findById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Verification request not found"));
-
-        CredentialRecord credential =
-                credentialService.getCredentialByCode(request.getCredentialCode());
-
-        if (credential == null) {
-            throw new ResourceNotFoundException("Credential not found");
-        }
-
-        // ✅ REQUIRED by test (even if not used)
-        verificationRuleService.getActiveRules();
-
-        if (credential.getExpiryDate() != null &&
-                credential.getExpiryDate().isBefore(LocalDate.now())) {
-            request.setStatus("FAILED");
-        } else {
-            request.setStatus("SUCCESS");
-        }
-
-        AuditTrailRecord audit = new AuditTrailRecord();
-        audit.setCredentialId(credential.getId());
-        auditTrailService.logEvent(audit);
-
-        return requestRepo.save(request);
+    public void setCredentialId(Long credentialId) {
+        this.credentialId = credentialId;
     }
 
-    @Override
-    public List<VerificationRequest> getRequestsByCredential(Long credentialId) {
-        return requestRepo.findByCredentialId(credentialId);
+    public String getRequestedBy() {
+        return requestedBy;
     }
 
-    @Override
-    public List<VerificationRequest> getAllRequests() {
-        return requestRepo.findAll();
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public String getVerificationMethod() {
+        return verificationMethod;
+    }
+
+    public void setVerificationMethod(String verificationMethod) {
+        this.verificationMethod = verificationMethod;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        this.verifiedAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public String getResultMessage() {
+        return resultMessage;
+    }
+
+    public void setResultMessage(String resultMessage) {
+        this.resultMessage = resultMessage;
     }
 }
