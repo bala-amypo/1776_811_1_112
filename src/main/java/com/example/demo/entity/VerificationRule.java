@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class VerificationRule {
@@ -9,46 +10,34 @@ public class VerificationRule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String ruleCode;
+    private boolean active = true;
 
-    private Boolean active = true;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getRuleCode() { return ruleCode; }
+    public void setRuleCode(String ruleCode) { this.ruleCode = ruleCode; }
 
-    public void setId(Long id) {   // ✅ REQUIRED
-        this.id = id;
-    }
-
-    public String getRuleCode() {
-        return ruleCode;
-    }
-
-    public void setRuleCode(String ruleCode) {
-        this.ruleCode = ruleCode;
-    }
-
-    public Boolean getActive() {
+    // ✅ Correct boolean getter
+    public boolean isActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
-    // ✅ IMPORTANT FOR SET BEHAVIOR
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof VerificationRule)) return false;
         VerificationRule that = (VerificationRule) o;
-        return ruleCode != null && ruleCode.equals(that.ruleCode);
+        return Objects.equals(ruleCode, that.ruleCode);
     }
 
     @Override
     public int hashCode() {
-        return ruleCode != null ? ruleCode.hashCode() : 0;
+        return Objects.hash(ruleCode);
     }
 }
