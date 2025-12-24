@@ -1,21 +1,26 @@
-
 package com.example.demo.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
-@Table(
-    name = "verification_rule",
-    uniqueConstraints = @UniqueConstraint(columnNames = "ruleCode")
-)
+@Table(name = "verification_rule")
 public class VerificationRule {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String ruleCode;
+    private String description;
+    private String appliesToType;
+    private String validationExpression;
+    private Boolean active = true;
+
+    // -------- GETTERS & SETTERS --------
+
+    public Long getId() {
+        return id;
+    }
 
     public String getRuleCode() {
         return ruleCode;
@@ -23,30 +28,6 @@ public class VerificationRule {
 
     public void setRuleCode(String ruleCode) {
         this.ruleCode = ruleCode;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAppliesToType() {
-        return appliesToType;
-    }
-
-    public void setAppliesToType(String appliesToType) {
-        this.appliesToType = appliesToType;
-    }
-
-    public String getValidationExpression() {
-        return validationExpression;
-    }
-
-    public void setValidationExpression(String validationExpression) {
-        this.validationExpression = validationExpression;
     }
 
     public Boolean getActive() {
@@ -57,28 +38,18 @@ public class VerificationRule {
         this.active = active;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // -------- REQUIRED FOR TESTS --------
 
-    @Column(nullable = false)
-    private String ruleCode;
-
-    private String description;
-
-    private String appliesToType;
-
-    @Column(columnDefinition = "TEXT")
-    private String validationExpression;
-
-    @Column(nullable = false)
-    private Boolean active = true;
-
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof VerificationRule)) return false;
+        VerificationRule rule = (VerificationRule) o;
+        return ruleCode != null && ruleCode.equals(rule.ruleCode);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public int hashCode() {
+        return ruleCode != null ? ruleCode.hashCode() : 0;
     }
 }

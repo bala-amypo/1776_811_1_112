@@ -1,47 +1,25 @@
 package com.example.demo.entity;
 
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 @Entity
-@Table(
-    name = "credential_record",
-    uniqueConstraints = @UniqueConstraint(columnNames = "credentialCode")
-)
+@Table(name = "credential_record")
 public class CredentialRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private Long holderId;
-
-    @Column(nullable = false)
     private String credentialCode;
-
-    @Column(nullable = false)
     private String title;
-
     private String issuer;
-
     private LocalDate issueDate;
-
     private LocalDate expiryDate;
-
     private String credentialType;
-
     private String status;
 
     @Column(columnDefinition = "TEXT")
@@ -53,7 +31,9 @@ public class CredentialRecord {
         joinColumns = @JoinColumn(name = "credential_id"),
         inverseJoinColumns = @JoinColumn(name = "rule_id")
     )
-    private Set<VerificationRule> rules;
+    private Set<VerificationRule> rules = new HashSet<>();
+
+    // ---------------- GETTERS & SETTERS ----------------
 
     public Long getId() {
         return id;
@@ -136,10 +116,20 @@ public class CredentialRecord {
     }
 
     public void setRules(Set<VerificationRule> rules) {
-        this.rules = rules;
+        this.rules = (rules == null) ? new HashSet<>() : rules;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // ---------- TEST-EXPECTED HELPERS ----------
+
+    public void addRule(VerificationRule rule) {
+        if (rule != null) {
+            this.rules.add(rule);
+        }
+    }
+
+    public void removeRule(VerificationRule rule) {
+        if (rule != null) {
+            this.rules.remove(rule);
+        }
     }
 }
