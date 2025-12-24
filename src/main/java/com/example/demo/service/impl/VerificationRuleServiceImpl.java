@@ -29,14 +29,14 @@ public class VerificationRuleServiceImpl implements VerificationRuleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
 
         existing.setRuleCode(updatedRule.getRuleCode());
-        existing.setActive(updatedRule.getActive()); // 🔴 must exist
+        existing.setActive(updatedRule.getActive());
 
         return repository.save(existing);
     }
 
     @Override
     public List<VerificationRule> getActiveRules() {
-        return repository.findByActiveTrue(); // 🔴 test expects this
+        return repository.findByActiveTrue();
     }
 
     @Override
