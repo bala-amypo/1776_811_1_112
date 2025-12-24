@@ -4,15 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "credential_record")
@@ -34,26 +26,26 @@ public class CredentialRecord {
     @Column(columnDefinition = "TEXT")
     private String metadataJson;
 
+    // ✅ MUST NEVER BE NULL
     @ManyToMany
     @JoinTable(
         name = "credential_rule_map",
         joinColumns = @JoinColumn(name = "credential_id"),
         inverseJoinColumns = @JoinColumn(name = "rule_id")
     )
-    private Set<VerificationRule> rules;
+    private Set<VerificationRule> rules = new HashSet<>();
 
-    // ==========================
-    // Null-safe rules handling
-    // ==========================
+    /* ---------------- SAFE RULE METHODS ---------------- */
+
     public Set<VerificationRule> getRules() {
-        if (this.rules == null) {
-            this.rules = new HashSet<>();
+        if (rules == null) {
+            rules = new HashSet<>();
         }
-        return this.rules;
+        return rules;
     }
 
     public void setRules(Set<VerificationRule> rules) {
-        this.rules = rules;
+        this.rules = (rules == null) ? new HashSet<>() : rules;
     }
 
     public void addRule(VerificationRule rule) {
@@ -68,87 +60,35 @@ public class CredentialRecord {
         }
     }
 
-    // ==========================
-    // Getters and Setters
-    // ==========================
+    /* ---------------- GETTERS / SETTERS ---------------- */
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getHolderId() { return holderId; }
+    public void setHolderId(Long holderId) { this.holderId = holderId; }
 
-    public Long getHolderId() {
-        return holderId;
-    }
+    public String getCredentialCode() { return credentialCode; }
+    public void setCredentialCode(String credentialCode) { this.credentialCode = credentialCode; }
 
-    public void setHolderId(Long holderId) {
-        this.holderId = holderId;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getCredentialCode() {
-        return credentialCode;
-    }
+    public String getIssuer() { return issuer; }
+    public void setIssuer(String issuer) { this.issuer = issuer; }
 
-    public void setCredentialCode(String credentialCode) {
-        this.credentialCode = credentialCode;
-    }
+    public LocalDate getIssueDate() { return issueDate; }
+    public void setIssueDate(LocalDate issueDate) { this.issueDate = issueDate; }
 
-    public String getTitle() {
-        return title;
-    }
+    public LocalDate getExpiryDate() { return expiryDate; }
+    public void setExpiryDate(LocalDate expiryDate) { this.expiryDate = expiryDate; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getCredentialType() { return credentialType; }
+    public void setCredentialType(String credentialType) { this.credentialType = credentialType; }
 
-    public String getIssuer() {
-        return issuer;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setIssuer(String issuer) {
-        this.issuer = issuer;
-    }
-
-    public LocalDate getIssueDate() {
-        return issueDate;
-    }
-
-    public void setIssueDate(LocalDate issueDate) {
-        this.issueDate = issueDate;
-    }
-
-    public LocalDate getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(LocalDate expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public String getCredentialType() {
-        return credentialType;
-    }
-
-    public void setCredentialType(String credentialType) {
-        this.credentialType = credentialType;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMetadataJson() {
-        return metadataJson;
-    }
-
-    public void setMetadataJson(String metadataJson) {
-        this.metadataJson = metadataJson;
-    }
+    public String getMetadataJson() { return metadataJson; }
+    public void setMetadataJson(String metadataJson) { this.metadataJson = metadataJson; }
 }
