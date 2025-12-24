@@ -1,5 +1,3 @@
-package com.example.demo.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +16,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()   // ✅ REQUIRED FOR TESTS
+                .anyRequest().permitAll() // ✅ REQUIRED FOR TESTS
             );
 
         return http.build();
@@ -27,6 +25,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
+
         return config.getAuthenticationManager();
     }
 
