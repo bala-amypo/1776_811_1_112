@@ -13,11 +13,9 @@ import com.example.demo.service.CredentialHolderProfileService;
 public class CredentialHolderProfileServiceImpl implements CredentialHolderProfileService {
 
     private final CredentialHolderProfileRepository repository;
-
     public CredentialHolderProfileServiceImpl(CredentialHolderProfileRepository repository) {
         this.repository = repository;
     }
-
     @Override
     public CredentialHolderProfile createHolder(CredentialHolderProfile profile) {
         return repository.save(profile);
