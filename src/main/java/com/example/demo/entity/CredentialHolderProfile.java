@@ -15,13 +15,13 @@ public class CredentialHolderProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+        
     @Column(nullable = false)
     private String holderId;
-
+    
     @Column(nullable = false)
     private String fullName;
-
+     
     @Column(nullable = false)
     private String email;
 
