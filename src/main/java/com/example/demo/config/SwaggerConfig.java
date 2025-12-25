@@ -18,12 +18,10 @@ public class SwaggerConfig {
         Server httpsServer = new Server();
         httpsServer.setUrl("https://9359.pro604cr.amypo.ai/");
         httpsServer.setDescription("HTTPS Server");
-
         SecurityScheme securityScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
-
         return new OpenAPI()
                 .info(new Info()
                         .title("Digital Credential Verification Engine")
