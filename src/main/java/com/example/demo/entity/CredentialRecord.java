@@ -25,8 +25,7 @@ public class CredentialRecord {
 
     @Column(columnDefinition = "TEXT")
     private String metadataJson;
-
-    // ✅ MUST NEVER BE NULL
+    
     @ManyToMany
     @JoinTable(
         name = "credential_rule_map",
