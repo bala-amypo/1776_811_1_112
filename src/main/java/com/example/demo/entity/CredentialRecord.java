@@ -9,11 +9,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "credential_record")
 public class CredentialRecord {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long holderId;
     private String credentialCode;
     private String title;
@@ -25,7 +23,7 @@ public class CredentialRecord {
 
     @Column(columnDefinition = "TEXT")
     private String metadataJson;
-    
+
     @ManyToMany
     @JoinTable(
         name = "credential_rule_map",
@@ -59,7 +57,6 @@ public class CredentialRecord {
         }
     }
 
-    /* ---------------- GETTERS / SETTERS ---------------- */
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
