@@ -30,7 +30,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // 🔴 THIS WAS MISSING — REQUIRED BY UserServiceImpl
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
