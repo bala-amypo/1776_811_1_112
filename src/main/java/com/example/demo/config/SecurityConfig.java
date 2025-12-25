@@ -18,9 +18,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // ✅ REQUIRED FOR TESTS + RUN
+                .anyRequest().permitAll() 
             );
-
+    
         return http.build();
     }
 

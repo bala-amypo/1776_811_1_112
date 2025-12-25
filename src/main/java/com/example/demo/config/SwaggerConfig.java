@@ -15,7 +15,6 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-
         Server httpsServer = new Server();
         httpsServer.setUrl("https://9359.pro604cr.amypo.ai/");
         httpsServer.setDescription("HTTPS Server");
