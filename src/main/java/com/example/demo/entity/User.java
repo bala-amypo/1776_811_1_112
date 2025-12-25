@@ -64,7 +64,7 @@ public class User {
         return createdAt;
     }
 
-    // ---------- Setters ----------
+   
 
     public void setId(Long id) {
         this.id = id;
