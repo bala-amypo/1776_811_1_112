@@ -21,11 +21,10 @@ public class User {
     private String role;
 
     private LocalDateTime createdAt;
-
-    // REQUIRED by JPA
+    
     public User() {}
 
-    // REQUIRED by TESTS
+    
     public User(Long id, String fullName, String email, String password, String role) {
         this.id = id;
         this.fullName = fullName;
