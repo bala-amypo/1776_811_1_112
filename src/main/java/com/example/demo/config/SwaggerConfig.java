@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-
 import java.util.List;
 
 @Configuration
@@ -16,13 +15,11 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-
         Server httpsServer = new Server();
         httpsServer.setUrl("https://9359.pro604cr.amypo.ai/");
         httpsServer.setDescription("HTTPS Server");
 
-        SecurityScheme jwtScheme = new SecurityScheme()
-                .name("Authorization")
+        SecurityScheme securityScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
                 .scheme("bearer")
                 .bearerFormat("JWT");
@@ -32,12 +29,12 @@ public class SwaggerConfig {
                         .title("Digital Credential Verification Engine")
                         .version("1.0"))
                 .servers(List.of(httpsServer))
-
-                // 🔑 APPLY JWT TO ALL APIs
-                .addSecurityItem(new SecurityRequirement().addList("Authorization"))
-
-                .components(new io.swagger.v3.oas.models.Components()
-                        .addSecuritySchemes("Authorization", jwtScheme)
+                .addSecurityItem(
+                        new SecurityRequirement().addList("Authorization")
+                )
+                .components(
+                        new io.swagger.v3.oas.models.Components()
+                                .addSecuritySchemes("Authorization", securityScheme)
                 );
     }
 }

@@ -1,7 +1,6 @@
 package com.example.demo.security;
 
 import java.io.IOException;
-import java.util.List;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -49,18 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (jwtUtil.validateToken(token, userDetails.getUsername())) {
 
-                    // ✅ ADDITION STARTS HERE
-                    String role = jwtUtil.extractClaims(token)
-                                          .get("role", String.class);
-
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
-                                    List.of(new SimpleGrantedAuthority(
-                                            "ROLE_" + role))
-                            );
-                    // ✅ ADDITION ENDS HERE
+                                    userDetails.getAuthorities());
 
                     authentication.setDetails(
                             new WebAuthenticationDetailsSource()

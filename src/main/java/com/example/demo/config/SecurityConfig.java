@@ -27,38 +27,11 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-
-                // 🔓 Public endpoints
-                .requestMatchers(
-                        "/auth/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-
-                // 👑 ADMIN only
-                .requestMatchers("/api/admin/**")
-                .hasRole("ADMIN")
-
-                // ✅ ADMIN + VERIFIER
-                .requestMatchers("/api/verify/**")
-                .hasAnyRole("ADMIN", "VERIFIER")
-
-                // 👁️ ADMIN + VERIFIER + VIEWER
-                .requestMatchers("/api/view/**")
-                .hasAnyRole("ADMIN", "VERIFIER", "VIEWER")
-
-                // 🔒 Any other API needs JWT
-                .requestMatchers("/api/**").authenticated()
-
-                // everything else
                 .anyRequest().permitAll()
             )
-
-            // 🔑 JWT Filter
             .addFilterBefore(
-                    jwtAuthenticationFilter,
-                    UsernamePasswordAuthenticationFilter.class
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
             );
 
         return http.build();
