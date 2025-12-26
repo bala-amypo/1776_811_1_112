@@ -1,3 +1,14 @@
+package com.example.demo.service.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.CredentialRecord;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.CredentialRecordRepository;
+import com.example.demo.service.CredentialRecordService;
+
 @Service
 public class CredentialRecordServiceImpl implements CredentialRecordService {
 
@@ -10,7 +21,7 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
     @Override
     public CredentialRecord createCredential(CredentialRecord record) {
         if (record.getStatus() == null) {
-            record.setStatus("VALID");
+            record.setStatus("VALID"); // default status
         }
         return repository.save(record);
     }
@@ -42,7 +53,7 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
         return repository.findAll();
     }
 
-    // ⭐ ADD THIS (TEST EXPECTS THIS NAME)
+    // ⭐ REQUIRED by some test cases (alias method)
     @Override
     public List<CredentialRecord> getAll() {
         return repository.findAll();

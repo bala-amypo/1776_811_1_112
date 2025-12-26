@@ -20,11 +20,11 @@ public class VerificationRequestServiceImpl
         implements VerificationRequestService {
 
     private final VerificationRequestRepository requestRepo;
-    private final CredentialRecordService credentialService; // ✅ SERVICE
+    private final CredentialRecordService credentialService;
     private final VerificationRuleService ruleService;
     private final AuditTrailService auditTrailService;
 
-    // 🔴 THIS CONSTRUCTOR MUST MATCH THE TEST EXACTLY
+    // 🔴 EXACT constructor order required by tests
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
             CredentialRecordService credentialService,
@@ -37,15 +37,11 @@ public class VerificationRequestServiceImpl
         this.auditTrailService = auditTrailService;
     }
 
-    // --------------------------------------------------
-
     @Override
     public VerificationRequest initiateVerification(VerificationRequest request) {
         request.setStatus("PENDING");
         return requestRepo.save(request);
     }
-
-    // --------------------------------------------------
 
     @Override
     public VerificationRequest processVerification(Long requestId) {
@@ -54,33 +50,34 @@ public class VerificationRequestServiceImpl
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Verification request not found"));
 
-        List<CredentialRecord> credentials = credentialService.getAll(); // ✅ service call
-
-        boolean expired = credentials.stream()
+        CredentialRecord credential = credentialService.getAllCredentials()
+                .stream()
                 .filter(c -> c.getId().equals(request.getCredentialId()))
-                .anyMatch(c ->
-                        c.getExpiryDate() != null &&
-                        c.getExpiryDate().isBefore(LocalDate.now())
-                );
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Credential not found"));
 
-        request.setStatus(expired ? "FAILED" : "SUCCESS");
-        VerificationRequest saved = requestRepo.save(request);
+        LocalDate today = LocalDate.now();
+
+        // ✅ TEST EXPECTATION
+        if (credential.getExpiryDate() != null &&
+            credential.getExpiryDate().isBefore(today)) {
+            request.setStatus("FAILED");
+        } else {
+            request.setStatus("SUCCESS");
+        }
 
         AuditTrailRecord audit = new AuditTrailRecord();
-        audit.setCredentialId(request.getCredentialId());
+        audit.setCredentialId(credential.getId());
         auditTrailService.logEvent(audit);
 
-        return saved;
+        return requestRepo.save(request);
     }
-
-    // --------------------------------------------------
 
     @Override
     public List<VerificationRequest> getRequestsByCredential(Long credentialId) {
         return requestRepo.findByCredentialId(credentialId);
     }
-
-    // --------------------------------------------------
 
     @Override
     public List<VerificationRequest> getAllRequests() {
