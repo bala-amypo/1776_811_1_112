@@ -14,4 +14,7 @@ public interface CredentialRecordService {
     CredentialRecord getCredentialByCode(String code);
 
     List<CredentialRecord> getAllCredentials();
+
+    // ⭐ ADD THIS (REQUIRED BY TESTS)
+    List<CredentialRecord> getAll();
 }
