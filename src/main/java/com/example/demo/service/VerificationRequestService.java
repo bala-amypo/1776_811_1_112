@@ -1,15 +1,15 @@
 package com.example.demo.service;
 
 import java.util.List;
-import com.example.demo.entity.VerificationRule;
+import com.example.demo.entity.VerificationRequest;
 
-public interface VerificationRuleService {
+public interface VerificationRequestService {
 
-    VerificationRule createRule(VerificationRule rule);
+    VerificationRequest initiateVerification(VerificationRequest request);
 
-    VerificationRule updateRule(Long id, VerificationRule rule); // 👈 REQUIRED
+    VerificationRequest processVerification(Long requestId);
 
-    List<VerificationRule> getAllRules();
+    List<VerificationRequest> getRequestsByCredential(Long credentialId);
 
-    List<VerificationRule> getActiveRules();
+    List<VerificationRequest> getAllRequests();
 }
