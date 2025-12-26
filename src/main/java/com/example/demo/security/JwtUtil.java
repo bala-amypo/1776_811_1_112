@@ -2,17 +2,13 @@ package com.example.demo.security;
 
 import java.security.Key;
 import java.util.Date;
-
 import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 @Component
 public class JwtUtil {
-
     private static final String SECRET_KEY =
             "THIS_IS_A_VERY_SECURE_SECRET_KEY_FOR_JWT_123456";
 
