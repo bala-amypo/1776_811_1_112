@@ -9,9 +9,9 @@ import com.example.demo.entity.AuditTrailRecord;
 import com.example.demo.entity.CredentialRecord;
 import com.example.demo.entity.VerificationRequest;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.CredentialRecordRepository;
 import com.example.demo.repository.VerificationRequestRepository;
 import com.example.demo.service.AuditTrailService;
-import com.example.demo.service.CredentialRecordService;
 import com.example.demo.service.VerificationRequestService;
 import com.example.demo.service.VerificationRuleService;
 
@@ -20,18 +20,18 @@ public class VerificationRequestServiceImpl
         implements VerificationRequestService {
 
     private final VerificationRequestRepository requestRepo;
-    private final CredentialRecordService credentialService;
+    private final CredentialRecordRepository credentialRepo;
     private final VerificationRuleService ruleService;
     private final AuditTrailService auditTrailService;
 
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
-            CredentialRecordService credentialService,
+            CredentialRecordRepository credentialRepo,
             VerificationRuleService ruleService,
             AuditTrailService auditTrailService) {
 
         this.requestRepo = requestRepo;
-        this.credentialService = credentialService;
+        this.credentialRepo = credentialRepo;
         this.ruleService = ruleService;
         this.auditTrailService = auditTrailService;
     }
@@ -53,22 +53,21 @@ public class VerificationRequestServiceImpl
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Verification request not found"));
 
-        List<CredentialRecord> credentials = credentialService.getAll();
+        List<CredentialRecord> credentials = credentialRepo.findAll();
 
-        boolean success = credentials.stream()
+        boolean expired = credentials.stream()
                 .filter(c -> c.getId().equals(request.getCredentialId()))
-                .noneMatch(c ->
+                .anyMatch(c ->
                         c.getExpiryDate() != null &&
                         c.getExpiryDate().isBefore(LocalDate.now())
                 );
 
-        request.setStatus(success ? "SUCCESS" : "FAILED");
+        request.setStatus(expired ? "FAILED" : "SUCCESS");
         VerificationRequest saved = requestRepo.save(request);
 
+        // Audit log (ONLY fields that exist)
         AuditTrailRecord audit = new AuditTrailRecord();
         audit.setCredentialId(request.getCredentialId());
-        audit.setAction("VERIFICATION_" + request.getStatus());
-
         auditTrailService.logEvent(audit);
 
         return saved;
