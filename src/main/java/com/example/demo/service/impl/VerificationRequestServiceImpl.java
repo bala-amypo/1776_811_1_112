@@ -1,10 +1,7 @@
 package com.example.demo.service.impl;
-
 import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.AuditTrailRecord;
 import com.example.demo.entity.CredentialRecord;
 import com.example.demo.entity.VerificationRequest;
