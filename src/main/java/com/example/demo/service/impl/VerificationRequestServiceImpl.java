@@ -24,7 +24,6 @@ public class VerificationRequestServiceImpl
     private final VerificationRuleService ruleService;
     private final AuditTrailService auditTrailService;
 
-    // 🔴 EXACT constructor order required by tests
     public VerificationRequestServiceImpl(
             VerificationRequestRepository requestRepo,
             CredentialRecordService credentialService,
@@ -59,7 +58,6 @@ public class VerificationRequestServiceImpl
 
         LocalDate today = LocalDate.now();
 
-        // ✅ TEST EXPECTATION
         if (credential.getExpiryDate() != null &&
             credential.getExpiryDate().isBefore(today)) {
             request.setStatus("FAILED");
