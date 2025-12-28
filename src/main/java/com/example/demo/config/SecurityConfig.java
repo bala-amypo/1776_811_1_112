@@ -27,12 +27,32 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+
+                // ✅ PUBLIC ENDPOINTS
+                .requestMatchers(
+                        "/auth/register",
+                        "/auth/login",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+
+                // ✅ ROLE BASED ACCESS (OPTIONAL – SAFE)
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/verify/**").hasAnyRole("ADMIN", "VERIFIER")
+                .requestMatchers("/api/view/**").hasAnyRole("ADMIN", "VERIFIER", "VIEWER")
+
+                // ✅ ALL API NEED JWT
+                .requestMatchers("/api/**").authenticated()
+
                 .anyRequest().permitAll()
-            )
-            .addFilterBefore(
+            );
+
+        // ✅ ADD JWT FILTER (VERY IMPORTANT)
+        http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
-            );
+        );
 
         return http.build();
     }
