@@ -49,4 +49,8 @@ public class JwtUtil {
         return extractEmail(token).equals(email)
                 && extractClaims(token).getExpiration().after(new Date());
     }
+    public String extractRole(String token) {
+    return extractClaims(token).get("role", String.class);
+}
+
 }

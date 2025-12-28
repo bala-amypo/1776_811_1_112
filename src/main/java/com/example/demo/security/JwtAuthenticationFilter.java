@@ -41,12 +41,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = authHeader.substring(7);
 
-            if (jwtUtil.validateToken(token)) {
+            String email = jwtUtil.extractEmail(token);
 
-                String email = jwtUtil.extractEmail(token);
-                String role = jwtUtil.extractRole(token); // ADMIN / VERIFIER / VIEWER
+            // ✅ FIX 1: call validateToken with (token, email)
+            if (jwtUtil.validateToken(token, email)) {
 
-                // 🔥 VERY IMPORTANT FIX
+                // ✅ FIX 2: role extracted safely
+                String role = jwtUtil.extractRole(token);
+
                 SimpleGrantedAuthority authority =
                         new SimpleGrantedAuthority("ROLE_" + role);
 
