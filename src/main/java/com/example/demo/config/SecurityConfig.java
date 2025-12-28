@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,10 +26,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            // ❌ Disable CSRF (JWT is stateless)
             .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
 
-                // ✅ PUBLIC ENDPOINTS
+                // ✅ PUBLIC ENDPOINTS (NO TOKEN)
                 .requestMatchers(
                         "/auth/register",
                         "/auth/login",
@@ -37,18 +40,20 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                 ).permitAll()
 
-                // ✅ ROLE BASED ACCESS (OPTIONAL – SAFE)
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/verify/**").hasAnyRole("ADMIN", "VERIFIER")
-                .requestMatchers("/api/view/**").hasAnyRole("ADMIN", "VERIFIER", "VIEWER")
+                // ✅ ADMIN ONLY – CREATE / UPDATE
+                .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
 
-                // ✅ ALL API NEED JWT
-                .requestMatchers("/api/**").authenticated()
+                // ✅ READ ACCESS – ALL ROLES
+                .requestMatchers(HttpMethod.GET, "/api/**")
+                    .hasAnyRole("ADMIN", "VERIFIER", "VIEWER")
 
-                .anyRequest().permitAll()
+                // ✅ EVERYTHING ELSE NEEDS AUTH
+                .anyRequest().authenticated()
             );
 
-        // ✅ ADD JWT FILTER (VERY IMPORTANT)
+        // ✅ JWT FILTER (MUST BE BEFORE USERNAME FILTER)
         http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -57,12 +62,14 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // ✅ Authentication manager (used in login)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // ✅ Password encoder (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
