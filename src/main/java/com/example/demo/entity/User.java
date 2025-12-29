@@ -9,18 +9,17 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
-    @Column(nullable = false)
+
     private String fullName;
 
     @Column(unique = true)
     private String email;
-    @Column(nullable = false)
+
     private String password;
     @Column(nullable = false)
     private String role;
-    @Column(nullable = false)
+
     private LocalDateTime createdAt;
     
     public User() {}
