@@ -20,9 +20,9 @@ public class AuditTrailRecord {
 
     @Column(nullable = false)
     private Long credentialId;
-
+    @Column(nullable = false)
     private String eventType;
-
+    
     @Column(columnDefinition = "TEXT")
     private String details;
 
