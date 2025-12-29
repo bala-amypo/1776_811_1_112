@@ -9,15 +9,20 @@ public class VerificationRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false)
     private Long credentialId;
-
+    @Column(nullable = false)
     private String requestedBy;
+    @Column(nullable = false)
     private String verificationMethod;
+    @Column(nullable = false)
     private String status;
-    private LocalDateTime verifiedAt;
+    @Column(nullable = false)
+    private LocalDateTime verifiedAt
+    @Column(nullable = false);
     private String resultMessage;
 
     public VerificationRequest() {}

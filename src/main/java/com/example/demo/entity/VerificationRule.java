@@ -7,9 +7,11 @@ public class VerificationRule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
-
+    @Column(nullable = false)
     private String ruleCode;
+    @Column(nullable = false)
     private String description;
     private String appliesToType;
     private String validationExpression;

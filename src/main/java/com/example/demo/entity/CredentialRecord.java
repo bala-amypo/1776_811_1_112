@@ -11,14 +11,23 @@ import jakarta.persistence.*;
 public class CredentialRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
+    @Column(nullable = false)
     private Long holderId;
+    @Column(nullable = false)
     private String credentialCode;
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String issuer;
+    @Column(nullable = false)
     private LocalDate issueDate;
+    @Column(nullable = false)
     private LocalDate expiryDate;
+    @Column(nullable = false)
     private String credentialType;
+    @Column(nullable = false)
     private String status;
 
     @Column(columnDefinition = "TEXT")
