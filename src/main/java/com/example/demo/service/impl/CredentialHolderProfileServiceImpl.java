@@ -16,7 +16,6 @@ public class CredentialHolderProfileServiceImpl
 
     private final CredentialHolderProfileRepository repository;
 
-    // 🔴 EXACT constructor required by tests
     public CredentialHolderProfileServiceImpl(
             CredentialHolderProfileRepository repository) {
         this.repository = repository;
