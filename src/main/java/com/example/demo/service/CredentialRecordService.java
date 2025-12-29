@@ -15,6 +15,5 @@ public interface CredentialRecordService {
 
     List<CredentialRecord> getAllCredentials();
 
-    // ⭐ ADD THIS (REQUIRED BY TESTS)
     List<CredentialRecord> getAll();
 }
