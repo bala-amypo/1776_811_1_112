@@ -33,17 +33,15 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Credential not found"));
 
-        // ✅ FIX 1: update credentialCode (THIS FIXES t14)
         if (updated.getCredentialCode() != null) {
             existing.setCredentialCode(updated.getCredentialCode());
         }
 
-        // ✅ FIX 2: update status if present
         if (updated.getStatus() != null) {
             existing.setStatus(updated.getStatus());
         }
 
-        return repository.save(existing); // MUST return updated object
+        return repository.save(existing);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class CredentialRecordServiceImpl implements CredentialRecordService {
 
     @Override
     public CredentialRecord getCredentialByCode(String code) {
-        // ✅ test expects NULL when not found
+
         return repository.findByCredentialCode(code).orElse(null);
     }
 

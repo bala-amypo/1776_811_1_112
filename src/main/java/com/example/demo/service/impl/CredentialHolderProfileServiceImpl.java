@@ -22,8 +22,6 @@ public class CredentialHolderProfileServiceImpl
         this.repository = repository;
     }
 
-    // --------------------------------------------------
-
     @Override
     public CredentialHolderProfile createHolder(
             CredentialHolderProfile profile) {
@@ -35,7 +33,6 @@ public class CredentialHolderProfileServiceImpl
         return repository.save(profile);
     }
 
-    // --------------------------------------------------
 
     @Override
     public CredentialHolderProfile getHolderById(Long id) {
@@ -44,14 +41,12 @@ public class CredentialHolderProfileServiceImpl
                         new ResourceNotFoundException("Holder not found"));
     }
 
-    // --------------------------------------------------
 
     @Override
     public List<CredentialHolderProfile> getAllHolders() {
         return repository.findAll();
     }
 
-    // --------------------------------------------------
 
     @Override
     public CredentialHolderProfile updateStatus(Long id, boolean active) {

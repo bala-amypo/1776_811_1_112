@@ -31,7 +31,7 @@ public class AuditTrailServiceImpl implements AuditTrailService {
         return auditRepo.findByCredentialId(credentialId);
     }
 
-    // ⭐ REQUIRED METHOD (THIS FIXES THE ERROR)
+    
     @Override
     public List<AuditTrailRecord> getAllLogs() {
         return auditRepo.findAll();

@@ -24,7 +24,6 @@ public class VerificationRuleServiceImpl
         return ruleRepo.save(rule);
     }
 
-    // ⭐ THIS METHOD FIXES THE ERROR
     @Override
     public VerificationRule updateRule(Long id, VerificationRule rule) {
 
