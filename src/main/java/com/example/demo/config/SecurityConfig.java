@@ -26,12 +26,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // ❌ Disable CSRF (JWT is stateless)
             .csrf(csrf -> csrf.disable())
 
             .authorizeHttpRequests(auth -> auth
 
-                // ✅ PUBLIC ENDPOINTS (NO TOKEN)
                 .requestMatchers(
                         "/auth/register",
                         "/auth/login",
@@ -40,20 +38,16 @@ public class SecurityConfig {
                         "/swagger-ui.html"
                 ).permitAll()
 
-                // ✅ ADMIN ONLY – CREATE / UPDATE
                 .requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
 
-                // ✅ READ ACCESS – ALL ROLES
                 .requestMatchers(HttpMethod.GET, "/api/**")
                     .hasAnyRole("ADMIN", "VERIFIER", "VIEWER")
 
-                // ✅ EVERYTHING ELSE NEEDS AUTH
                 .anyRequest().authenticated()
             );
 
-        // ✅ JWT FILTER (MUST BE BEFORE USERNAME FILTER)
         http.addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -62,14 +56,12 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ Authentication manager (used in login)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ✅ Password encoder (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
